@@ -1,0 +1,58 @@
+
+from fCode import funcCode, getIndep, getSingle
+import pandas as pd
+
+import numpy as np
+from matplotlib import pyplot as plt
+import seaborn as sns
+sns.set()
+from sklearn.datasets import make_blobs
+from sklearn.cluster import Birch
+
+from sklearn.datasets import make_moons
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import adjusted_rand_score
+
+
+indepResult = new funcCode()
+getIndepCode = new getIndep()
+getSingle = new getSingle()
+codeList =[]
+
+# Read The code as serial line by line from *.Py file
+codeFile = ("codeTest.py","r")
+for line in codeFile:
+    #Check independancies and related code function
+    if indepResult(line): 
+        fullFunctionCode = getIndepCode(line)
+        codeList.append(fullFunctionCode)
+    else:
+        fullFunctionCode = getSingle()
+        codeList.append(fullFunctionCode)
+
+for l in codeList:
+
+    infDic = {
+        "Encryption":l.enc, "A static Authentication":l.sA, "Authorization data":l.aD, "Client session":l.cS, 
+        "Cookies":l.coki, "Persistence validation":l.pV, "Middleware services":l.mS, "Buffer Overflow":bO, 
+         "Variables Overflow":l.vO, "String Format":l.sF, "Command Injection":l.cI, "Cross-site scripting XSS":l.xss , 
+         "SQL injection":l.sqI, "Insecure direct object reference":l.iDOR, "Improper error handling":l.ieH, 
+         "information leakage":l.iil, "Insecure storage and improper use of cryptography":l.iSiUc,
+        "Rank":(l.count()-1)/(5-1)}
+    df = pd.DataFrame(infDic)
+    df.to_csv("stage1.csv")
+
+
+# fillting Birch
+
+y, clusters = make_moons(
+        n_samples="stage1.csv" , noise=1, random_state=100
+    )
+
+plt.scatter(y[:,0], y[:,1], alpha=0.7, edgecolors='b')
+brc = Birch(branching_factor=500, n_clusters=None, threshold=1.2)
+brc.fit(y)
+labels = brc.predict(y)
+plt.scatter(y[:,0], y[:,1], c=labels, cmap='rainbow', alpha=0.7, edgecolors='b')
+
+ 
